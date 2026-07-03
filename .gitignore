@@ -1,0 +1,15 @@
+# Build outputs
+*.exe
+*.dll
+*.pdb
+*.ilk
+
+# Object files
+*.obj
+
+# Visual Studio folders
+.vs/
+Debug/
+Release/
+x64/
+x86/
