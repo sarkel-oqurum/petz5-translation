@@ -35,6 +35,7 @@ int main()
     }
 
     std::cout << "Injection succeeded.\n" << GetLastError();
+    Sleep(500); // hook is losing the race sometimes and doesnt load?!
     
     ResumeThread(pi.hThread);
     
