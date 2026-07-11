@@ -48,6 +48,7 @@ HFONT WINAPI MyCreateFontIndirectA(
 
     strcpy_s(
         modified.lfFaceName,
+        LF_FACESIZE,
         "Chuvash256"
     );
     //modified.lfCharSet = EASTEUROPE_CHARSET; // 238
@@ -86,7 +87,7 @@ MessageBoxA(nullptr, buf, "Original LOGFONT", MB_OK);
     CLIP_DEFAULT_PRECIS,
     DEFAULT_QUALITY,
     DEFAULT_PITCH,
-    "256Chuvash"
+    "Chuvash256"
 );
 
 if (test)
