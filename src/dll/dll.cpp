@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 #include "hooks.h"
-#include "createfontindirecta.h"
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")

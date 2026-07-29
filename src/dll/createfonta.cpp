@@ -12,11 +12,12 @@ CreateFontA_t FindCreateFontA()
     if (!gdi)
     {MessageBoxA(
             nullptr,
-            "did not find font",
+            "did not find gdis",
             "Petz",
             MB_OK
         );
-        return nullptr;}
+        return nullptr;
+    }
 
     return (CreateFontA_t)GetProcAddress(
         gdi,
@@ -44,6 +45,11 @@ HFONT WINAPI MyCreateFontA(
     if (pszFaceName)
     {
         pszFaceName = "Impact";
+    }
+
+    if (iCharSet)
+    {
+        iCharSet = 204; // RUSSIAN
     }
     return RealCreateFontA(
         cHeight,

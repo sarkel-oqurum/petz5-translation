@@ -53,7 +53,8 @@ HFONT WINAPI MyCreateFontIndirectA(
     );
     //modified.lfCharSet = EASTEUROPE_CHARSET; // 238
 
-    //modified.lfCharSet = ANSI_CHARSET;
+    modified.lfCharSet = 204; //RUSSIAN
+    
 
     char buf[256];
     sprintf_s(
