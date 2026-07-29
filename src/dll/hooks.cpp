@@ -5,15 +5,14 @@
 #include "createfontindirecta.h"
 #include "createfonta.h"
 //#include "drawtexta.h"
-#include "insertmenua.h"
+#include "DoWMDrawItemGotoMenu.h"
 #include "fonttypes.h"
 
 void* g_trampolineIndirectA = nullptr;
 void* g_trampolineA = nullptr;
 void* g_trampolineDrawA = nullptr;
 void* g_trampolineMenuA = nullptr;
-
-//CreateFontIndirectA_t RealCreateFontIndirectA = nullptr;
+void* g_trampolineWMDrawA = nullptr;
 
 void* HookFunction(void* targetAddress, void* hookDestination) {
     if (!targetAddress|| !hookDestination) return nullptr;
@@ -62,14 +61,14 @@ bool InstallFontHook()
         RealCreateFontA = (CreateFontA_t)HookFunction(targetFontA, (void*)MyCreateFontA);
     }
 
-    // 3. Hook Insertmenu
-    void* targetDrawA = (void*)FindInsertMenuItemA();
+    // 3. Hook DrawItemGotoMenu
+    void* targetDrawA = (void*)FindDoWMDrawItemGotoMenu();
     if (targetDrawA) {
-        RealInsertMenuItemA = (InsertMenuItemA_t)HookFunction(targetDrawA, (void*)MyInsertMenuItemA);
+        RealDoWMDrawItemGotoMenu = (DoWMDrawItemGotoMenu_t)HookFunction(targetDrawA, (void*)MyDoWMDrawItemGotoMenu);
     }
     //std::cout << "GetLastError:\n" << RealDrawTextA;
     // Verify all hooks initialized successfully
     return (RealCreateFontIndirectA != nullptr) && 
            (RealCreateFontA != nullptr) && 
-           (RealInsertMenuItemA != nullptr);
+           (RealDoWMDrawItemGotoMenu != nullptr);
 }
