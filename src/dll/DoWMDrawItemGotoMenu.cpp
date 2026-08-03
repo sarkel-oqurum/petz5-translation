@@ -1,28 +1,30 @@
 #include <windows.h>
-#include <string.h>
 #include <stdio.h>
 
 struct WinMenu;
 
-typedef long (__thiscall* DoWMDrawItemGotoMenu_t)(
-    WinMenu*, HWND, UINT, DRAWITEMSTRUCT* 
+typedef LRESULT (__thiscall* DoWMDrawItemGotoMenu_t)(
+    WinMenu*,
+    HWND,
+    WPARAM,
+    LPARAM
 );
 
 DoWMDrawItemGotoMenu_t RealDoWMDrawItemGotoMenu = nullptr;
 
 DoWMDrawItemGotoMenu_t FindDoWMDrawItemGotoMenu()
 {
-    return (DoWMDrawItemGotoMenu_t)0x004023D2;
+    return reinterpret_cast<DoWMDrawItemGotoMenu_t>(0x00407540);
 }
 
-long __fastcall MyDoWMDrawItemGotoMenu(
+LRESULT __fastcall MyDoWMDrawItemGotoMenu(
     WinMenu* self,
-    void* edx,
+    void*,
     HWND hwnd,
-    UINT param2,
-    DRAWITEMSTRUCT* dis)
+    WPARAM wParam,
+    LPARAM lParam)
 {
     MessageBoxA(nullptr, "Hook!", "Petz", MB_OK);
 
-    return RealDoWMDrawItemGotoMenu(self, hwnd, param2, dis);
+    return RealDoWMDrawItemGotoMenu(self, hwnd, wParam, lParam);
 }

@@ -4,71 +4,112 @@
 #include <iostream>
 #include "createfontindirecta.h"
 #include "createfonta.h"
-//#include "drawtexta.h"
 #include "DoWMDrawItemGotoMenu.h"
+//#include "getstockobject.h"
+//#include "selectobject.h"
 #include "fonttypes.h"
 
 void* g_trampolineIndirectA = nullptr;
 void* g_trampolineA = nullptr;
-void* g_trampolineDrawA = nullptr;
-void* g_trampolineMenuA = nullptr;
-void* g_trampolineWMDrawA = nullptr;
+//void* g_trampolineStockObjectA = nullptr;
+void* g_trampolineSelectObjectA = nullptr;
 
-void* HookFunction(void* targetAddress, void* hookDestination) {
-    if (!targetAddress|| !hookDestination) return nullptr;
+void* HookFunction(void* targetAddress, void* hookDestination, size_t hookSize)
+{
+    if (!targetAddress || !hookDestination || hookSize < 5)
+        return nullptr;
 
-    // what this does
-    void* trampoline = VirtualAlloc(nullptr, 10, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-    if (!trampoline) return nullptr;
+    // trampoline = original bytes + JMP back
+    void* trampoline = VirtualAlloc(
+        nullptr,
+        hookSize + 5,
+        MEM_COMMIT | MEM_RESERVE,
+        PAGE_EXECUTE_READWRITE);
 
-    // copy original 5 bytes to trampoline
-    memcpy(trampoline, targetAddress, 5);
+    if (!trampoline)
+        return nullptr;
+
+    // copy original bytes
+    memcpy(trampoline, targetAddress, hookSize);
 
     BYTE* trampBytes = (BYTE*)trampoline;
-    trampBytes[5] = 0xE9; // JMP opcode
 
-    DWORD jumpBackOffset = ((DWORD)targetAddress + 5) - ((DWORD)trampoline + 5) - 5;
-    *(DWORD*)(trampBytes + 6) = jumpBackOffset;
+    // JMP back
+    trampBytes[hookSize] = 0xE9;
 
-    // patch  the target function
+    DWORD jumpBackOffset =
+        ((DWORD)targetAddress + hookSize)
+        - ((DWORD)trampoline + hookSize)
+        - 5;
+
+    *(DWORD*)(trampBytes + hookSize + 1) = jumpBackOffset;
+
     DWORD oldProtect;
-    VirtualProtect(targetAddress, 5, PAGE_EXECUTE_READWRITE, &oldProtect);
+    VirtualProtect(targetAddress, hookSize, PAGE_EXECUTE_READWRITE, &oldProtect);
 
-    BYTE patch[5];
-    patch[0] = 0xE9; // JMP opcode
+    BYTE* patch = new BYTE[hookSize];
+    memset(patch, 0x90, hookSize);   // fill with NOPs
 
-    DWORD jumpToHookOffset = (DWORD)hookDestination - (DWORD)targetAddress - 5;
+    patch[0] = 0xE9;
+
+    DWORD jumpToHookOffset =
+        (DWORD)hookDestination
+        - (DWORD)targetAddress
+        - 5;
+
     *(DWORD*)(patch + 1) = jumpToHookOffset;
 
-    memcpy(targetAddress, patch, 5);
-    VirtualProtect(targetAddress, 5, oldProtect, &oldProtect);
+    memcpy(targetAddress, patch, hookSize);
+
+    delete[] patch;
+
+    VirtualProtect(targetAddress, hookSize, oldProtect, &oldProtect);
 
     return trampoline;
 }
-
 
 bool InstallFontHook()
 {
     // 1. Hook CreateFontIndirectA
     void* targetIndirectA = (void*)FindCreateFontIndirectA();
     if (targetIndirectA) {
-        RealCreateFontIndirectA = (CreateFontIndirectA_t)HookFunction(targetIndirectA, (void*)MyCreateFontIndirectA);
+        RealCreateFontIndirectA =
+            (CreateFontIndirectA_t)HookFunction(
+            targetIndirectA,
+            (void*)MyCreateFontIndirectA,
+            5);
     }
 
     // 2. Hook CreateFontA
     void* targetFontA = (void*)FindCreateFontA();
     if (targetFontA) {
-        RealCreateFontA = (CreateFontA_t)HookFunction(targetFontA, (void*)MyCreateFontA);
+        RealCreateFontA =
+            (CreateFontA_t)HookFunction(
+            targetFontA,
+            (void*)MyCreateFontA,
+            5);
     }
 
-    // 3. Hook DrawItemGotoMenu
-    void* targetDrawA = (void*)FindDoWMDrawItemGotoMenu();
-    if (targetDrawA) {
-        RealDoWMDrawItemGotoMenu = (DoWMDrawItemGotoMenu_t)HookFunction(targetDrawA, (void*)MyDoWMDrawItemGotoMenu);
+    //void* targetStock = FindGetStockObject();
+    //if (targetStock)
+    //{
+    //    RealGetStockObject =
+    //        (GetStockObject_t)HookFunction(targetStock, (void*)MyGetStockObject);
+    //}
+
+    void* targetMenu = FindDoWMDrawItemGotoMenu();
+    if (targetMenu)
+    {
+        RealDoWMDrawItemGotoMenu =
+            (DoWMDrawItemGotoMenu_t)HookFunction(
+            targetMenu,
+            (void*)MyDoWMDrawItemGotoMenu,
+            8); 
     }
     //std::cout << "GetLastError:\n" << RealDrawTextA;
     // Verify all hooks initialized successfully
     return (RealCreateFontIndirectA != nullptr) && 
            (RealCreateFontA != nullptr) && 
+           //(RealGetStockObject != nullptr) &&
            (RealDoWMDrawItemGotoMenu != nullptr);
 }
