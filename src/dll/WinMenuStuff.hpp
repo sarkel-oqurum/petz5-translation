@@ -211,7 +211,7 @@ LRESULT MyWinMenu::MyDoWMDrawItemGotoMenu(HWND hWnd, WPARAM wParam, LPARAM lPara
         if (!isGrayed || isSelected){
             HFONT hFont = CreateFont(24, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, 
                 DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 
-                DEFAULT_QUALITY, DEFAULT_PITCH, TEXT("Impact"));
+                DEFAULT_QUALITY, DEFAULT_PITCH, TEXT("Chuvash256"));
 
             DrawTextA(hdc, areaName, -1, &rc, DT_SINGLELINE | DT_VCENTER);
         }

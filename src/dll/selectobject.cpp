@@ -49,7 +49,7 @@ HGDIOBJ WINAPI MySelectObject(HDC hdc, HGDIOBJ obj)
                 CLIP_DEFAULT_PRECIS,
                 DEFAULT_QUALITY,
                 DEFAULT_PITCH,
-                "Impact");
+                "Chuvash256");
     }
     char buf[256];
 

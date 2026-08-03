@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-struct WinMenu;
+class WinMenu;
 
 typedef LRESULT (__thiscall* DoWMDrawItemGotoMenu_t)(
     WinMenu*,

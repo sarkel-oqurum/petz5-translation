@@ -53,7 +53,7 @@ if (f)
                 CLIP_DEFAULT_PRECIS,
                 DEFAULT_QUALITY,
                 DEFAULT_PITCH,
-                "Impact");
+                "Chuvash256");
         }
 
         return gMyFont;

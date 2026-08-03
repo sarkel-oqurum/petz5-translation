@@ -44,7 +44,7 @@ HFONT WINAPI MyCreateFontA(
 {
     if (pszFaceName)
     {
-        pszFaceName = "Impact";
+        pszFaceName = "Chuvash256";
     }
 
     if (iCharSet)
