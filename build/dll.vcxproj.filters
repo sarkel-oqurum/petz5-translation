@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Lighty\Documents\projects\petzChuvash\src\dll\dll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Lighty\Documents\projects\petzChuvash\src\dll\hooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Lighty\Documents\projects\petzChuvash\src\dll\CreateFontA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Lighty\Documents\projects\petzChuvash\src\dll\CreateFontIndirectA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Lighty\Documents\projects\petzChuvash\src\dll\DoWMDrawItemGotoMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Lighty\Documents\projects\petzChuvash\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{7F7396F7-83FF-3C88-A780-6CB2F7848046}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

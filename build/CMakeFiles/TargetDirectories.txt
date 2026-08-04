@@ -1,0 +1,4 @@
+C:/Users/Lighty/Documents/projects/petzChuvash/build/CMakeFiles/dll.dir
+C:/Users/Lighty/Documents/projects/petzChuvash/build/CMakeFiles/petz_launcher.dir
+C:/Users/Lighty/Documents/projects/petzChuvash/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Lighty/Documents/projects/petzChuvash/build/CMakeFiles/ZERO_CHECK.dir
