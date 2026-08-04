@@ -209,7 +209,7 @@ LRESULT MyWinMenu::MyDoWMDrawItemGotoMenu(HWND hWnd, WPARAM wParam, LPARAM lPara
         
 //      draw text
         if (!isGrayed || isSelected){
-            HFONT hFont = CreateFont(24, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, 
+            HFONT hFont = CreateFont(15, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, 
                 DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 
                 DEFAULT_QUALITY, DEFAULT_PITCH, TEXT("Chuvash256"));
 

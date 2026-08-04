@@ -32,6 +32,8 @@ bool InjectDLL(HANDLE hProcess, const char* dllPath)
         "LoadLibraryA"
     );
 
+    printf("[injector.cpp] GetProcessId: %lu\n", GetProcessId(hProcess));
+
     if (!loadLib)
     {
         std::cout << "GetProcAddress failed.\n";
@@ -54,6 +56,19 @@ bool InjectDLL(HANDLE hProcess, const char* dllPath)
         return false;
     }
 
+    WaitForSingleObject(hThread, INFINITE);
+
+    DWORD exitCode = 0;
+    GetExitCodeThread(hThread, &exitCode);
+    DWORD err = GetLastError();
+
+std::cout << "GetLastError: "
+          << err << '\n';
+
+    std::cout << "LoadLibrary return: 0x"
+          << std::hex << exitCode << '\n';
+
     CloseHandle(hThread);
-    return true;
+
+    return exitCode != 0;
 }

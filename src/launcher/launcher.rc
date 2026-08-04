@@ -1,0 +1,18 @@
+#include <windows.h>
+
+IDI_ICON1 ICON "iconexe.ico"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "FileDescription", "Petz Chuvash Launcher"
+            VALUE "ProductName", "Petz Chuvash"
+            VALUE "CompanyName", "Sarkel"
+        END
+    END
+END

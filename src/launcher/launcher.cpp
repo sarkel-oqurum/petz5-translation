@@ -1,4 +1,5 @@
 #include "injector.h"
+#include "path.h"
 
 BOOL LaunchPetz(PROCESS_INFORMATION& pi) { 
     // start the program up
@@ -16,5 +17,6 @@ BOOL LaunchPetz(PROCESS_INFORMATION& pi) {
     &si,                // required by CreateProcess (window/startup config)
     &pi                 // receives process + thread handles from Windows
     );
+    
     return ok;
 }

@@ -2,14 +2,16 @@
 #include <string.h>
 #include <stdio.h>
 #include "hooks.h"
+#include "path.h"
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
 
 DWORD WINAPI MainThread(LPVOID)
 {
+    auto fontPath = GetExeDirectory() + "\\Chuvash256.ttf";
     AddFontResourceExA(
-        "C:\\Games\\Petz 5\\Chuvash256.ttf",
+        fontPath.c_str(),
         FR_PRIVATE,
         nullptr
     );
@@ -39,8 +41,6 @@ DWORD WINAPI MainThread(LPVOID)
     return 0;
 }
 
-
-
 BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
     DWORD reason,
@@ -49,8 +49,14 @@ BOOL WINAPI DllMain(
 {
     if (reason == DLL_PROCESS_ATTACH)
     {
-
         DisableThreadLibraryCalls(hinstDLL);
+
+        MessageBoxA(
+            nullptr,
+            "DLL loaded!",
+            "debug",
+            MB_OK
+        );
 
         CreateThread(
             nullptr,
