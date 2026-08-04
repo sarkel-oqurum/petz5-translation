@@ -62,7 +62,7 @@ bool InjectDLL(HANDLE hProcess, const char* dllPath)
     GetExitCodeThread(hThread, &exitCode);
     DWORD err = GetLastError();
 
-std::cout << "GetLastError: "
+    std::cout << "GetLastError: "
           << err << '\n';
 
     std::cout << "LoadLibrary return: 0x"

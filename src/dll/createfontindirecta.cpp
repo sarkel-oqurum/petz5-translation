@@ -23,12 +23,8 @@ CreateFontIndirectA_t FindCreateFontIndirectA()
     //);
 
     if (!gdi)
-    {MessageBoxA(
-            nullptr,
-            "did not find font",
-            "Petz",
-            MB_OK
-        );
+    {
+        //std::cout << "[src/dll/createfontindirecta.cpp] GDI32 not found.\n";
         return nullptr;}
 
     return (CreateFontIndirectA_t)GetProcAddress(
@@ -66,43 +62,37 @@ HFONT WINAPI MyCreateFontIndirectA(
     lpLogFont->lfWeight
 );
 
-MessageBoxA(nullptr, buf, "Original LOGFONT", MB_OK);
-    
-    MessageBoxA(
-    nullptr,
-    modified.lfFaceName,
-    "Font requested",
-    MB_OK
-    );
+    //printf("[src/dll/createfontindirecta.cpp] " << buf << "\n");
+    //std::cout << "[src/dll/createfontindirecta.cpp] Font requested." << modified.lfFaceName << "\n";
     HFONT test = CreateFontA(
-    -16,
-    0,
-    0,
-    0,
-    FW_NORMAL,
-    FALSE,
-    FALSE,
-    FALSE,
-    DEFAULT_CHARSET,
-    OUT_DEFAULT_PRECIS,
-    CLIP_DEFAULT_PRECIS,
-    DEFAULT_QUALITY,
-    DEFAULT_PITCH,
-    "Chuvash256"
+        -16,
+        0,
+        0,
+        0,
+        FW_NORMAL,
+        FALSE,
+        FALSE,
+        FALSE,
+        DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS,
+        CLIP_DEFAULT_PRECIS,
+        DEFAULT_QUALITY,
+        DEFAULT_PITCH,
+        "Chuvash256"
 );
 
 if (test)
 {
-    MessageBoxA(nullptr, "Font exists", "Test", MB_OK);
+    printf("[src/dll/createfontindirecta.cpp] Font exists.\n");
 }
 else
 {
-    MessageBoxA(nullptr, "Font missing", "Test", MB_OK);
+    printf("[src/dll/createfontindirecta.cpp] Font missing.\n");
 }
 
 if (!RealCreateFontIndirectA)
 {
-    MessageBoxA(nullptr, "NULL trampoline", "error", MB_OK);
+    printf("[src/dll/createfontindirecta.cpp] Error: NULL trampoline.\n");
     return nullptr;
 }
 

@@ -10,12 +10,8 @@ CreateFontA_t FindCreateFontA()
     HMODULE gdi = GetModuleHandleA("gdi32.dll");
 
     if (!gdi)
-    {MessageBoxA(
-            nullptr,
-            "did not find gdis",
-            "Petz",
-            MB_OK
-        );
+    {
+        //std::cout << "[src/dll/createfonta.cpp] GDI32 not found.\n";
         return nullptr;
     }
 

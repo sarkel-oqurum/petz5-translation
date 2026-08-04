@@ -19,22 +19,11 @@ DWORD WINAPI MainThread(LPVOID)
 
     if (InstallFontHook())
     {
-        MessageBoxA(
-            nullptr,
-            "Font hook installed",
-            "Petz",
-            MB_OK
-        );
-        
+        printf("[src/dll/dll.cpp] Font hook installed.\n");
     }
     else
     {
-        MessageBoxA(
-            nullptr,
-            "Hook failed",
-            "Petz",
-            MB_OK
-        );
+        printf("[src/dll/dll.cpp] Hook failed.\n");
     }
 
 
@@ -50,14 +39,6 @@ BOOL WINAPI DllMain(
     if (reason == DLL_PROCESS_ATTACH)
     {
         DisableThreadLibraryCalls(hinstDLL);
-
-        MessageBoxA(
-            nullptr,
-            "DLL loaded!",
-            "debug",
-            MB_OK
-        );
-
         CreateThread(
             nullptr,
             0,

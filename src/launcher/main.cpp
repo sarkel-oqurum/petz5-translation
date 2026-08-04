@@ -31,7 +31,7 @@ int main()
         return 1;
     }
 
-    std::cout << "Injection succeeded.\n" << GetLastError();
+    std::cout << "[main.cpp] Injection succeeded.";
     Sleep(500); // hook is losing the race sometimes and doesnt load?!
     
     ResumeThread(pi.hThread);
@@ -44,6 +44,6 @@ int main()
     DWORD exitCode = 0;
     GetExitCodeThread(pi.hThread, &exitCode);
 
-    std::cout <<"ok "<< exitCode;
+    std::cout <<"[main.cpp] Exit code: "<< exitCode;
     return 0;
 }

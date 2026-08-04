@@ -22,12 +22,7 @@ SelectObject_t FindSelectObject()
 
     if (!gdi32)
     {
-        MessageBoxA(
-            nullptr,
-            "Could not find gdi32.dll",
-            "Petz",
-            MB_OK
-        );
+        std::cout << "[src/dll/selectobject.cpp] Could not find gdi32.dll.";
         return nullptr;
     }
 
