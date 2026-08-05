@@ -106,6 +106,7 @@ bool InstallFontHook()
             (void*)MyDoWMDrawItemGotoMenu,
             8); 
     }
+    printf("print test");
     //std::cout << "GetLastError:\n" << RealDrawTextA;
     // Verify all hooks initialized successfully
     return (RealCreateFontIndirectA != nullptr) && 

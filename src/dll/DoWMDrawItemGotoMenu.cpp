@@ -1,8 +1,20 @@
+#define STRICT
 #include <windows.h>
 #include <stdio.h>
+#include <string>
 #include "WinMenuStuff.hpp"
 
 struct WinMenu;
+
+static void Log(const char* text)
+{
+    FILE* f = fopen("C:\\Temp\\menu.txt", "a");
+    if (f)
+    {
+        fputs(text, f);
+        fclose(f);
+    }
+}
 
 typedef LRESULT (__thiscall* DoWMDrawItemGotoMenu_t)(
     WinMenu*,
@@ -15,6 +27,7 @@ DoWMDrawItemGotoMenu_t RealDoWMDrawItemGotoMenu = nullptr;
 
 DoWMDrawItemGotoMenu_t FindDoWMDrawItemGotoMenu()
 {
+    printf("mydowmdrawitem");
     return reinterpret_cast<DoWMDrawItemGotoMenu_t>(0x00407540);
 }
 
@@ -25,7 +38,7 @@ LRESULT __fastcall MyDoWMDrawItemGotoMenu(
     WPARAM wParam,
     LPARAM lParam)
 {
-        DRAWITEMSTRUCT* const dis = (DRAWITEMSTRUCT*)lParam;
+    DRAWITEMSTRUCT* const dis = (DRAWITEMSTRUCT*)lParam;
     HDC hdc= dis->hDC;
     UINT itemId = dis->itemID;
 
@@ -129,19 +142,37 @@ LRESULT __fastcall MyDoWMDrawItemGotoMenu(
         rc.left = textX;
         
 //      draw text
+        Log(areaName);
+        
         if (!isGrayed || isSelected){
             HFONT hFont = CreateFont(15, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, 
                 DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 
                 DEFAULT_QUALITY, DEFAULT_PITCH, TEXT("Chuvash256"));
             HFONT oldFont = (HFONT)SelectObject(hdc, hFont);
 
-            DrawTextA(hdc, areaName, -1, &rc, DT_SINGLELINE | DT_VCENTER);
+            //shitty bandaid solution bear with me. have to write bytes directly
+            if (!lstrcmpA(areaName, "Adoption Center")) {
+                const char* name = "\xCF" "\xF0" "\xE8" "\xFE" "\xF2";
+                DrawTextA(hdc, name, -1, &rc, DT_SINGLELINE | DT_VCENTER);
+            }            
+            else if (!lstrcmpA(areaName, "Exit")) {
+                DrawTextA(hdc, "\xD2" "\xF3" "\xF5", -1, &rc, DT_SINGLELINE | DT_VCENTER);
+            }
+            else if (!lstrcmpA(areaName, "Editor")) DrawTextA(hdc, "\xD0" "\xE5" "\xE4" "\xE0" "\xEA" "\xF2" "\xEE" "\xF0", -1, &rc, DT_SINGLELINE | DT_VCENTER);
+            else if (!lstrcmpA(areaName, "Desktop")) DrawTextA(hdc, "\xD1" "\x84" "\xF2" "\xE5" "\xEB", -1, &rc, DT_SINGLELINE | DT_VCENTER);
+            else if (!lstrcmpA(areaName, "Custom Scenes")) DrawTextA(hdc, "\xCA" "\xE0" "\xF1" "\xF2" "\xEE" "\xEC" "\xD1" "\xF6" "\xE5" "\xED" "\xE0" "\xF1" "\xE5" "\xEC", -1, &rc, DT_SINGLELINE | DT_VCENTER);
+            else if (!lstrcmpA(areaName, "Petz Publisher")) DrawTextA(hdc, "Petz " "\xE8" "\xE7" "\xE4" "\xE0" "\xF2" "\xE5" "\xEB" "\x84", -1, &rc, DT_SINGLELINE | DT_VCENTER);
+            else DrawTextA(hdc, areaName, -1, &rc, DT_SINGLELINE | DT_VCENTER);
             
             SelectObject(hdc, oldFont);
         }
         else {
             int textY = rc.top + (rc.bottom - self->m_CurAreaGrayedOutTextY - rc.top) / 2;
-            DrawStateA(hdc, NULL, NULL, (LPARAM)areaName, strlen(areaName),
+             if (!lstrcmpA(areaName, "Adoption Center")) {
+                const char* name = "\xCF" "\xF0" "\xE8" "\xFE" "\xF2";
+                DrawTextA(hdc, name, -1, &rc, DT_SINGLELINE | DT_VCENTER);
+            }
+            else DrawStateA(hdc, NULL, NULL, (LPARAM)areaName, strlen(areaName),
                        textX, textY, rc.right - textX, rc.bottom - rc.top,
                        DST_TEXT | DSS_DISABLED);
         };
