@@ -186,10 +186,12 @@ LRESULT __fastcall MyDoWMDrawItemGotoMenu(
 
             //shitty bandaid solution bear with me. have to write bytes directly
             if (!lstrcmpA(areaName, "Adoption Center")) {
-                const char* name = "\xCF" "\xF0" "\xE8" "\xFE" "\xF2";
+                const char* name = "\xD3" "\xF1" "\xF0" "\xE0" "\xE2" "\x20" "\x87" "\xF3" "\xF0" "\xF7" "\x84";
+                // Усрав çурчĕ
                 DrawTextA(hdc, name, -1, &rc, DT_SINGLELINE | DT_VCENTER);
             }            
             else if (!lstrcmpA(areaName, "Exit")) {
+                // Тух
                 DrawTextA(hdc, "\xD2" "\xF3" "\xF5", -1, &rc, DT_SINGLELINE | DT_VCENTER);
             }
             else if (!lstrcmpA(areaName, "Editor")) DrawTextA(hdc, "\xD0" "\xE5" "\xE4" "\xE0" "\xEA" "\xF2" "\xEE" "\xF0", -1, &rc, DT_SINGLELINE | DT_VCENTER);
@@ -203,7 +205,7 @@ LRESULT __fastcall MyDoWMDrawItemGotoMenu(
         else {
             int textY = rc.top + (rc.bottom - self->m_CurAreaGrayedOutTextY - rc.top) / 2;
              if (!lstrcmpA(areaName, "Adoption Center")) {
-                const char* name = "\xCF" "\xF0" "\xE8" "\xFE" "\xF2";
+                const char* name = "\xD3" "\xF1" "\xF0" "\xE0" "\xE2" "\x20" "\x87" "\xF3" "\xF0" "\xF7" "\x84";
                 DrawTextA(hdc, name, -1, &rc, DT_SINGLELINE | DT_VCENTER);
             }
             else DrawStateA(hdc, NULL, NULL, (LPARAM)areaName, strlen(areaName),
