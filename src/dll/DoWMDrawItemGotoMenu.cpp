@@ -31,6 +31,40 @@ DoWMDrawItemGotoMenu_t FindDoWMDrawItemGotoMenu()
     return reinterpret_cast<DoWMDrawItemGotoMenu_t>(0x00407540);
 }
 
+bool MyBitmapBlt (HDC hdc, int x, int y, HBITMAP hBmp, DWORD rop, int centerWidth, bool grayed) {
+
+    //https://doxygen.reactos.org/d3/d89/win32ss_2gdi_2gdi32_2objects_2gdiobj_8c.html
+    BITMAP bmp;
+
+    int obj = GetObjectA(hBmp, 0x18, &bmp);
+    if (obj == 0) {
+        MessageBoxA(
+            nullptr,
+            "bitmap",
+            "Petz",
+            MB_OK
+        );
+        return 0;
+    }
+
+    //if ((centerWidth != 0) && (iVar3 = (centerWidth - local_14) / 2, iVar3 < 0)) {
+    //    iVar3 = 0;
+    //}
+
+    if (grayed) {
+    //    BVar2 = DrawStateA(param_1,*(HBRUSH *)this,(DRAWSTATEPROC)0x0,(LPARAM)param_4,0,iVar3 + param_2,
+    //                   param_3,local_14,local_10,0x24);
+    //    return BVar2;
+    }
+
+    HDC newHdc = CreateCompatibleDC(hdc);
+    HGDIOBJ h = SelectObject(newHdc, hBmp);
+    bool BVar2 = BitBlt(hdc, /*iVar3 + */x, y, bmp.bmWidth, bmp.bmHeight, newHdc, 0, 0, rop);
+    SelectObject(newHdc, h);
+    DeleteDC(newHdc);
+    return BVar2;
+}
+
 LRESULT __fastcall MyDoWMDrawItemGotoMenu(
     WinMenu* self,
     void*,
@@ -94,8 +128,8 @@ LRESULT __fastcall MyDoWMDrawItemGotoMenu(
             RECT rcIcon = rc;
             rcIcon.right = rcIcon.left + GOTO_ICON_COLUMN_WIDTH;
             FillRect(hdc, &rcIcon, self->m_ColorMenu);
-            //self->BitmapBlt(hdc, rc.left + GOTO_ICON_X, rc.top + GOTO_ICON_Y,
-            //          mii.hbmpChecked, SRCCOPY, 0, false);
+            MyBitmapBlt(hdc, rc.left + GOTO_ICON_X, rc.top + GOTO_ICON_Y,
+                      mii.hbmpChecked, SRCCOPY, 0, false);
         };
 
         rc = dis->rcItem;
@@ -208,3 +242,4 @@ LRESULT __fastcall MyDoWMDrawItemGotoMenu(
     if (hOldPal) SelectPalette(hdc, hOldPal, FALSE);
     return 1;
 }
+

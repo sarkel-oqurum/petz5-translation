@@ -1,8 +1,9 @@
 // Made by Reflet (Many thanks to them)
 
 #pragma once
-#include <WINDOWS.H>
+#include <windows.h>
 #include <WINDOWSX.H>
+#include <iostream>
 
 #ifndef PFLIB_PETZ3
 #define PFLIB_PETZ3 0
@@ -100,12 +101,19 @@ public:
 class MyWinMenu : public WinMenu {
     public:
     LRESULT MyDoWMDrawItemGotoMenu(HWND hWnd, WPARAM wParam, LPARAM lParam) const;
+    bool MyBitmapBlt(HDC hdc, int x, int y, HBITMAP hBmp, DWORD rop, int centerWidth, bool grayed) const;
 };
 
 LRESULT MyWinMenu::MyDoWMDrawItemGotoMenu(HWND hWnd, WPARAM wParam, LPARAM lParam) const {
     DRAWITEMSTRUCT* const dis = (DRAWITEMSTRUCT*)lParam;
     HDC hdc= dis->hDC;
     UINT itemId = dis->itemID;
+            MessageBoxA(
+            nullptr,
+            "windows menu entry",
+            "Petz",
+            MB_OK
+        );
 
 //  palette management stuff
     HPALETTE hOldPal = NULL;
@@ -156,11 +164,17 @@ LRESULT MyWinMenu::MyDoWMDrawItemGotoMenu(HWND hWnd, WPARAM wParam, LPARAM lPara
     else {
 //      draw icon
         if (mii.hbmpChecked) {
+            MessageBoxA(
+            nullptr,
+            "windows menu icon",
+            "Petz",
+            MB_OK
+        );
             RECT rcIcon = rc;
             rcIcon.right = rcIcon.left + GOTO_ICON_COLUMN_WIDTH;
             FillRect(hdc, &rcIcon, m_ColorMenu);
-            //BitmapBlt(hdc, rc.left + GOTO_ICON_X, rc.top + GOTO_ICON_Y,
-            //          mii.hbmpChecked, SRCCOPY, 0, false);
+            MyBitmapBlt(hdc, rc.left + GOTO_ICON_X, rc.top + GOTO_ICON_Y,
+                      mii.hbmpChecked, SRCCOPY, 0, false);
         };
 
         rc = dis->rcItem;
@@ -253,3 +267,37 @@ LRESULT MyWinMenu::MyDoWMDrawItemGotoMenu(HWND hWnd, WPARAM wParam, LPARAM lPara
     if (hOldPal) SelectPalette(hdc, hOldPal, FALSE);
     return 1;
 };
+
+bool MyWinMenu::MyBitmapBlt (HDC hdc, int x, int y, HBITMAP hBmp, DWORD rop, int centerWidth, bool grayed) const {
+
+    //https://doxygen.reactos.org/d3/d89/win32ss_2gdi_2gdi32_2objects_2gdiobj_8c.html
+    BITMAP bmp;
+
+    int obj = GetObjectA(hBmp, 0x18, &bmp);
+    if (obj == 0) {
+        MessageBoxA(
+            nullptr,
+            "bitmap",
+            "Petz",
+            MB_OK
+        );
+        return 0;
+    }
+
+    //if ((centerWidth != 0) && (iVar3 = (centerWidth - local_14) / 2, iVar3 < 0)) {
+    //    iVar3 = 0;
+    //}
+
+    if (grayed) {
+    //    BVar2 = DrawStateA(param_1,*(HBRUSH *)this,(DRAWSTATEPROC)0x0,(LPARAM)param_4,0,iVar3 + param_2,
+    //                   param_3,local_14,local_10,0x24);
+    //    return BVar2;
+    }
+
+    HDC newHdc = CreateCompatibleDC(hdc);
+    HGDIOBJ h = SelectObject(newHdc, hBmp);
+    bool BVar2 = BitBlt(hdc, /*iVar3 + */x, y, bmp.bmWidth, bmp.bmHeight, newHdc, 0, 0, rop);
+    SelectObject(newHdc, h);
+    DeleteDC(newHdc);
+    return BVar2;
+}
